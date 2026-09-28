@@ -1,3 +1,7 @@
+# Environnement de déploiement
+.env
+!.env.example
+
 # Python
 __pycache__/
 *.py[cod]
