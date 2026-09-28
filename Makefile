@@ -15,9 +15,9 @@ help:
 
 keys:
 	@mkdir -p keys
-	openssl genrsa -out keys/private.pem 4096
+	openssl genrsa -traditional -out keys/private.pem 2048
 	openssl rsa -in keys/private.pem -pubout -out keys/public.pem
-	@echo "Clés générées dans keys/"
+	@echo "Clés PKCS#1 RSA-2048 générées dans keys/"
 
 env:
 	@if [ ! -f .env ]; then \

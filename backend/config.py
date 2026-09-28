@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     debug: bool = False
 
     # Database
-    database_url: str = "postgresql://ipregistry:changeme@localhost:5432/ip_registry"
+    database_url: str = "postgresql+psycopg2://ipregistry:changeme@localhost:5432/ip_registry"
 
     # JWT RS256
     jwt_private_key_path: str = "/app/keys/private.pem"

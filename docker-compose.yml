@@ -24,7 +24,7 @@ services:
         condition: service_healthy
     env_file: .env
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-ipregistry}:${POSTGRES_PASSWORD:-changeme}@db:5432/${POSTGRES_DB:-ip_registry}
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-ipregistry}:${POSTGRES_PASSWORD:-changeme}@db:5432/${POSTGRES_DB:-ip_registry}
     volumes:
       - ./keys:/app/keys:ro
       - ip_data:/data
