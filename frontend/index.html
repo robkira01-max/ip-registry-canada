@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Registre IP Canada — OPIC/CIPO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════ LOGIN SCREEN ═══════════════════ -->
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <div class="login-flag">
+      <div class="flag-red"></div>
+      <div class="flag-white">
+        <div class="maple-leaf">🍁</div>
+      </div>
+      <div class="flag-red"></div>
+    </div>
+    <h1 class="login-title">Registre IP Canada</h1>
+    <p class="login-subtitle">Plateforme de gestion de la propriété intellectuelle<br>
+      <span class="login-cipo">OPIC / CIPO — Gouvernement du Canada</span>
+    </p>
+    <form id="login-form" class="login-form">
+      <div class="form-group">
+        <label>Nom d'utilisateur</label>
+        <input type="text" id="username" placeholder="admin" autocomplete="username" required/>
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required/>
+      </div>
+      <div id="login-error" class="error-msg hidden"></div>
+      <button type="submit" class="btn-primary btn-full">
+        <span id="login-btn-text">Se connecter</span>
+        <span id="login-spinner" class="spinner hidden"></span>
+      </button>
+    </form>
+    <p class="login-footer">Session sécurisée JWT RS256 · TLS</p>
+  </div>
+</div>
+
+<!-- ═══════════════════ MAIN APP ═══════════════════ -->
+<div id="app" class="app hidden">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-maple">🍁</span>
+      <div class="brand-text">
+        <span class="brand-name">Registre IP</span>
+        <span class="brand-sub">Canada · OPIC</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="dashboard">
+        <span class="nav-icon">⊞</span> Tableau de bord
+      </a>
+      <a href="#" class="nav-item" data-section="patents">
+        <span class="nav-icon">⚙</span> Brevets
+      </a>
+      <a href="#" class="nav-item" data-section="trademarks">
+        <span class="nav-icon">™</span> Marques
+      </a>
+      <a href="#" class="nav-item" data-section="copyrights">
+        <span class="nav-icon">©</span> Droits d'auteur
+      </a>
+      <a href="#" class="nav-item" data-section="designs">
+        <span class="nav-icon">◈</span> Dessins industriels
+      </a>
+      <a href="#" class="nav-item" data-section="search">
+        <span class="nav-icon">⌕</span> Recherche globale
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar" id="user-avatar">A</div>
+        <div class="user-details">
+          <span class="user-name" id="user-name">admin</span>
+          <span class="user-role" id="user-role">Administrateur</span>
+        </div>
+      </div>
+      <button class="btn-logout" id="logout-btn" title="Déconnexion">⏻</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="topbar">
+      <button class="menu-toggle" id="menu-toggle">☰</button>
+      <div class="topbar-title" id="topbar-title">Tableau de bord</div>
+      <div class="topbar-actions">
+        <span class="env-badge">v1.0</span>
+        <button class="btn-new hidden" id="btn-new">+ Nouveau</button>
+      </div>
+    </header>
+
+    <!-- ── Dashboard ── -->
+    <section id="section-dashboard" class="section active">
+      <div class="page-header">
+        <h2>Vue d'ensemble</h2>
+        <p>Tous les actifs de propriété intellectuelle enregistrés au Canada</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card stat-patent">
+          <div class="stat-icon">⚙</div>
+          <div class="stat-body">
+            <div class="stat-number" id="stat-patents">—</div>
+            <div class="stat-label">Brevets</div>
+          </div>
+        </div>
+        <div class="stat-card stat-trademark">
+          <div class="stat-icon">™</div>
+          <div class="stat-body">
+            <div class="stat-number" id="stat-trademarks">—</div>
+            <div class="stat-label">Marques</div>
+          </div>
+        </div>
+        <div class="stat-card stat-copyright">
+          <div class="stat-icon">©</div>
+          <div class="stat-body">
+            <div class="stat-number" id="stat-copyrights">—</div>
+            <div class="stat-label">Droits d'auteur</div>
+          </div>
+        </div>
+        <div class="stat-card stat-design">
+          <div class="stat-icon">◈</div>
+          <div class="stat-body">
+            <div class="stat-number" id="stat-designs">—</div>
+            <div class="stat-label">Dessins industriels</div>
+          </div>
+        </div>
+      </div>
+      <div class="recent-grid">
+        <div class="recent-card">
+          <h3 class="recent-title">Brevets récents</h3>
+          <div id="recent-patents" class="recent-list"><div class="loading-row"></div></div>
+        </div>
+        <div class="recent-card">
+          <h3 class="recent-title">Marques récentes</h3>
+          <div id="recent-trademarks" class="recent-list"><div class="loading-row"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Patents ── -->
+    <section id="section-patents" class="section hidden">
+      <div class="page-header">
+        <h2>Brevets</h2>
+        <p>Inventions, modèles d'utilité, dessins de plantes</p>
+      </div>
+      <div class="toolbar">
+        <input class="search-inline" type="text" placeholder="Filtrer par titre…" id="filter-patents"/>
+        <select id="filter-patent-status" class="select-inline">
+          <option value="">Tous les statuts</option>
+          <option value="draft">Brouillon</option>
+          <option value="filed">Déposé</option>
+          <option value="published">Publié</option>
+          <option value="granted">Accordé</option>
+          <option value="rejected">Rejeté</option>
+          <option value="abandoned">Abandonné</option>
+          <option value="expired">Expiré</option>
+        </select>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table" id="table-patents">
+          <thead>
+            <tr><th>#</th><th>Titre (FR)</th><th>Déposant</th><th>Type</th><th>Statut</th><th>Dépôt</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="tbody-patents"><tr><td colspan="7" class="loading-cell">Chargement…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Trademarks ── -->
+    <section id="section-trademarks" class="section hidden">
+      <div class="page-header">
+        <h2>Marques de commerce</h2>
+        <p>Marques verbales, figuratives, mixtes, de certification</p>
+      </div>
+      <div class="toolbar">
+        <input class="search-inline" type="text" placeholder="Filtrer par nom…" id="filter-trademarks"/>
+        <select id="filter-tm-status" class="select-inline">
+          <option value="">Tous les statuts</option>
+          <option value="draft">Brouillon</option>
+          <option value="filed">Déposé</option>
+          <option value="advertised">Annoncé</option>
+          <option value="registered">Enregistré</option>
+          <option value="refused">Refusé</option>
+          <option value="expired">Expiré</option>
+        </select>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table" id="table-trademarks">
+          <thead>
+            <tr><th>#</th><th>Nom (FR)</th><th>Propriétaire</th><th>Type</th><th>Classes Nice</th><th>Statut</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="tbody-trademarks"><tr><td colspan="7" class="loading-cell">Chargement…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Copyrights ── -->
+    <section id="section-copyrights" class="section hidden">
+      <div class="page-header">
+        <h2>Droits d'auteur</h2>
+        <p>Œuvres littéraires, artistiques, musicales, dramatiques</p>
+      </div>
+      <div class="toolbar">
+        <input class="search-inline" type="text" placeholder="Filtrer par titre…" id="filter-copyrights"/>
+        <select id="filter-cr-type" class="select-inline">
+          <option value="">Tous les types</option>
+          <option value="literary">Littéraire</option>
+          <option value="artistic">Artistique</option>
+          <option value="musical">Musical</option>
+          <option value="dramatic">Dramatique</option>
+          <option value="sound_recording">Enregistrement sonore</option>
+          <option value="performance">Représentation</option>
+          <option value="communication_signal">Signal de communication</option>
+        </select>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr><th>#</th><th>Titre</th><th>Type d'œuvre</th><th>Auteur(s)</th><th>Statut</th><th>Enregistrement</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="tbody-copyrights"><tr><td colspan="7" class="loading-cell">Chargement…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Designs ── -->
+    <section id="section-designs" class="section hidden">
+      <div class="page-header">
+        <h2>Dessins industriels</h2>
+        <p>Caractéristiques visuelles d'un produit fini (forme, configuration, motif)</p>
+      </div>
+      <div class="toolbar">
+        <input class="search-inline" type="text" placeholder="Filtrer par titre…" id="filter-designs"/>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr><th>#</th><th>Titre</th><th>Propriétaire</th><th>Classes Locarno</th><th>Statut</th><th>Dépôt</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="tbody-designs"><tr><td colspan="7" class="loading-cell">Chargement…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Search ── -->
+    <section id="section-search" class="section hidden">
+      <div class="page-header">
+        <h2>Recherche globale</h2>
+        <p>Cherchez parmi tous les types de propriété intellectuelle</p>
+      </div>
+      <div class="search-hero">
+        <div class="search-box">
+          <span class="search-ico">⌕</span>
+          <input type="text" id="global-search-input" placeholder="Rechercher brevets, marques, droits d'auteur, dessins…" autocomplete="off"/>
+          <button id="global-search-btn" class="btn-primary">Rechercher</button>
+        </div>
+      </div>
+      <div id="search-results" class="search-results"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══════════════════ MODAL ═══════════════════ -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Nouveau</h3>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="modal-cancel">Annuler</button>
+      <button class="btn-primary" id="modal-submit">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TOAST ═══════════════════ -->
+<div id="toast-container"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
